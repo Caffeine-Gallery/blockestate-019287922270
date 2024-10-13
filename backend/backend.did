@@ -2,21 +2,34 @@ type ShareId = nat;
 type Share = 
  record {
    amount: nat;
+   areaId: AreaId;
    owner: principal;
    propertyId: PropertyId;
  };
 type PropertyId = nat;
 type Property = 
  record {
-   availableShares: nat;
+   areas: vec Area;
    id: PropertyId;
+   name: text;
+   totalValue: float64;
+ };
+type AreaId = nat;
+type Area = 
+ record {
+   availableShares: nat;
+   id: AreaId;
    name: text;
    pricePerShare: float64;
    totalShares: nat;
  };
 service : {
-  addProperty: (text, nat, float64) -> (PropertyId);
-  buyShares: (PropertyId, nat) -> (opt ShareId);
+  addProperty: (text, float64, vec record {
+                                     text;
+                                     nat;
+                                     float64;
+                                   }) -> (PropertyId);
+  buyShares: (PropertyId, AreaId, nat) -> (opt ShareId);
   getAllProperties: () -> (vec Property) query;
   getProperty: (PropertyId) -> (opt Property) query;
   getUserShares: (principal) -> (vec Share) query;

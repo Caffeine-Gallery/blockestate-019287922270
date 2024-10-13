@@ -39,11 +39,24 @@ async function loadProperties() {
         propertyElement.className = 'property';
         propertyElement.innerHTML = `
             <h3>${property.name}</h3>
-            <p>Available Shares: ${property.availableShares}</p>
-            <p>Price per Share: $${property.pricePerShare.toFixed(2)}</p>
-            <input type="number" id="amount-${property.id}" min="1" max="${property.availableShares}" value="1">
-            <button onclick="buyShares(${property.id})">Buy Shares</button>
+            <p>Total Value: $${property.totalValue.toFixed(2)}</p>
+            <div class="areas"></div>
         `;
+
+        const areasContainer = propertyElement.querySelector('.areas');
+        property.areas.forEach(area => {
+            const areaElement = document.createElement('div');
+            areaElement.className = 'area';
+            areaElement.innerHTML = `
+                <h4>${area.name}</h4>
+                <p>Available Shares: ${area.availableShares}</p>
+                <p>Price per Share: $${area.pricePerShare.toFixed(2)}</p>
+                <input type="number" id="amount-${property.id}-${area.id}" min="1" max="${area.availableShares}" value="1">
+                <button onclick="buyShares(${property.id}, ${area.id})">Buy Shares</button>
+            `;
+            areasContainer.appendChild(areaElement);
+        });
+
         propertyList.appendChild(propertyElement);
     });
 }
@@ -58,18 +71,19 @@ async function loadUserShares() {
         shareElement.className = 'share';
         shareElement.innerHTML = `
             <p>Property ID: ${share.propertyId}</p>
+            <p>Area ID: ${share.areaId}</p>
             <p>Amount: ${share.amount}</p>
         `;
         userSharesList.appendChild(shareElement);
     });
 }
 
-window.buyShares = async function(propertyId) {
-    const amountInput = document.getElementById(`amount-${propertyId}`);
+window.buyShares = async function(propertyId, areaId) {
+    const amountInput = document.getElementById(`amount-${propertyId}-${areaId}`);
     const amount = parseInt(amountInput.value, 10);
 
     if (amount > 0) {
-        const result = await backend.buyShares(propertyId, amount);
+        const result = await backend.buyShares(propertyId, areaId, amount);
         if (result !== null) {
             alert(`Successfully bought ${amount} shares!`);
             await loadProperties();

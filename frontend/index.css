@@ -19,16 +19,32 @@ main {
     margin: 0 auto;
 }
 
-h1, h2 {
+h1, h2, h3, h4 {
     margin-bottom: 1rem;
 }
 
-.property, .share {
+.property {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 1rem;
     margin-bottom: 1rem;
+}
+
+.area {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.share {
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 input[type="number"] {
